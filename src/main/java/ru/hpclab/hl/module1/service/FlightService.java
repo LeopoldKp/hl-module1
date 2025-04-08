@@ -1,4 +1,3 @@
-// FlightService.java
 package ru.hpclab.hl.module1.service;
 
 import org.springframework.stereotype.Service;
@@ -35,10 +34,13 @@ public class FlightService {
         flightRepository.delete(flightNumber);
     }
 
-    // Новый метод для поиска рейсов по направлению и дате
     public List<Flight> getFlightsByDestinationAndDate(String destination, LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
-        return flightRepository.findByDestinationAndDepartureTimeBetween(destination, startOfDay, endOfDay);
+        return flightRepository.findByDestinationAndDate(destination, startOfDay, endOfDay);
+    }
+
+    public int getAvailableSeatsCount(UUID flightNumber) {
+        return flightRepository.getAvailableSeats(flightNumber);
     }
 }

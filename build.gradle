@@ -18,6 +18,15 @@ repositories {
 }
 
 dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // Для работы с UUID в PostgreSQL
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'org.postgresql:postgresql:42.5.4'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

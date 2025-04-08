@@ -1,4 +1,3 @@
-// Booking.java
 package ru.hpclab.hl.module1.model;
 
 import java.util.UUID;
