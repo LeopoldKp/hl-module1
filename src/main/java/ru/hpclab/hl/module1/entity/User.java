@@ -1,4 +1,4 @@
-package ru.hpclab.hl.module1.model;
+package ru.hpclab.hl.module1.entity;
 
 
 import org.springframework.lang.NonNull;

@@ -2,7 +2,7 @@ package ru.hpclab.hl.module1.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.hpclab.hl.module1.model.User;
+import ru.hpclab.hl.module1.entity.User;
 import ru.hpclab.hl.module1.service.UserService;
 
 import java.util.List;

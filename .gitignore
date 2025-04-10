@@ -23,6 +23,8 @@ dist/
 target/
 dist/
 
+build
+gradle
 # JetBrains IDE
 .idea/
 

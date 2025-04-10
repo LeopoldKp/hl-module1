@@ -1,6 +1,6 @@
 package ru.hpclab.hl.module1.service;
 
-import ru.hpclab.hl.module1.model.User;
+import ru.hpclab.hl.module1.entity.User;
 import ru.hpclab.hl.module1.repository.UserRepository;
 
 import java.util.List;

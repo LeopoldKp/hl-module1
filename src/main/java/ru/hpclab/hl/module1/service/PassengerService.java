@@ -1,43 +1,38 @@
-// PassengerService.java
 package ru.hpclab.hl.module1.service;
 
 import org.springframework.stereotype.Service;
-import ru.hpclab.hl.module1.model.Passenger;
+import ru.hpclab.hl.module1.dto.PassengerDTO;
+import ru.hpclab.hl.module1.entity.PassengerEntity;
+import ru.hpclab.hl.module1.mapper.PassengerMapper;
 import ru.hpclab.hl.module1.repository.PassengerRepository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PassengerService {
+
     private final PassengerRepository passengerRepository;
 
     public PassengerService(PassengerRepository passengerRepository) {
         this.passengerRepository = passengerRepository;
     }
 
-    public List<Passenger> getAllPassengers() {
-        return passengerRepository.findAll();
+    public List<PassengerDTO> getAllPassengers() {
+        return passengerRepository.findAll().stream()
+                .map(PassengerMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Passenger> getPassengerById(UUID id) {
-        return passengerRepository.findById(id);
+    public PassengerDTO getPassengerById(Long id) {
+        return passengerRepository.findById(id)
+                .map(PassengerMapper::toDTO)
+                .orElse(null);
     }
 
-    public Passenger createPassenger(Passenger passenger) {
-        if (passenger.getId() == null) {
-            passenger.setId(UUID.randomUUID());
-        }
-        return passengerRepository.save(passenger);
-    }
-
-    public void deletePassenger(UUID id) {
-        passengerRepository.delete(id);
-    }
-
-    public Passenger updatePassenger(UUID id, Passenger passenger) {
-        passenger.setId(id);
-        return passengerRepository.save(passenger);
+    public PassengerDTO createOrUpdatePassenger(PassengerDTO passengerDTO) {
+        PassengerEntity entity = PassengerMapper.toEntity(passengerDTO);
+        entity = passengerRepository.save(entity);
+        return PassengerMapper.toDTO(entity);
     }
 }

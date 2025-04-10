@@ -1,46 +1,52 @@
 package ru.hpclab.hl.module1.service;
 
 import org.springframework.stereotype.Service;
-import ru.hpclab.hl.module1.model.Flight;
+import ru.hpclab.hl.module1.dto.FlightDTO;
+import ru.hpclab.hl.module1.entity.FlightEntity;
+import ru.hpclab.hl.module1.mapper.FlightMapper;
 import ru.hpclab.hl.module1.repository.FlightRepository;
+import ru.hpclab.hl.module1.repository.BookingRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class FlightService {
+
     private final FlightRepository flightRepository;
+    private final BookingRepository bookingRepository;
 
-    public FlightService(FlightRepository flightRepository) {
+    public FlightService(FlightRepository flightRepository, BookingRepository bookingRepository) {
         this.flightRepository = flightRepository;
+        this.bookingRepository = bookingRepository;
     }
 
-    public List<Flight> getAllFlights() {
-        return flightRepository.findAll();
+    public List<FlightDTO> getAllFlights() {
+        return flightRepository.findAll().stream()
+                .map(this::enrichWithAvailableSeats)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Flight> getFlightById(UUID flightNumber) {
-        return flightRepository.findById(flightNumber);
+    public FlightDTO getFlightById(Long id) {
+        return flightRepository.findById(id)
+                .map(this::enrichWithAvailableSeats)
+                .orElse(null);
     }
 
-    public Flight createFlight(Flight flight) {
-        return flightRepository.save(flight);
+    public List<FlightDTO> findFlights(String departure, String destination, LocalDateTime date) {
+        LocalDateTime startDate = date.withHour(0).withMinute(0);
+        LocalDateTime endDate = date.withHour(23).withMinute(59);
+
+        return flightRepository.findByRouteAndDate(departure, destination, startDate, endDate).stream()
+                .map(this::enrichWithAvailableSeats)
+                .collect(Collectors.toList());
     }
 
-    public void deleteFlight(UUID flightNumber) {
-        flightRepository.delete(flightNumber);
-    }
-
-    public List<Flight> getFlightsByDestinationAndDate(String destination, LocalDate date) {
-        LocalDateTime startOfDay = date.atStartOfDay();
-        LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
-        return flightRepository.findByDestinationAndDate(destination, startOfDay, endOfDay);
-    }
-
-    public int getAvailableSeatsCount(UUID flightNumber) {
-        return flightRepository.getAvailableSeats(flightNumber);
+    private FlightDTO enrichWithAvailableSeats(FlightEntity flight) {
+        int bookedSeats = bookingRepository.countByFlightId(flight.getId());
+        FlightDTO dto = FlightMapper.toDTO(flight);
+        dto.setAvailableSeats(flight.getCapacity() - bookedSeats);
+        return dto;
     }
 }
