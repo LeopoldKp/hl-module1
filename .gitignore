@@ -16,12 +16,11 @@ dist/
 # Log files
 *.log
 
-# Package files
-
 
 # Maven
 target/
 dist/
+
 
 gradle
 # JetBrains IDE

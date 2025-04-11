@@ -43,6 +43,27 @@ public class FlightService {
                 .collect(Collectors.toList());
     }
 
+    public int getAvailableSeatsForRouteAndDate(String departure, String destination, LocalDateTime date) {
+        LocalDateTime startDate = date.withHour(0).withMinute(0);
+        LocalDateTime endDate = date.withHour(23).withMinute(59);
+
+        List<FlightEntity> flights = flightRepository.findByRouteAndDate(departure, destination, startDate, endDate);
+
+        return flights.stream()
+                .mapToInt(flight -> {
+                    int bookedSeats = bookingRepository.countByFlightId(flight.getId());
+                    return flight.getCapacity() - bookedSeats;
+                })
+                .sum();
+    }
+
+    public int getAvailableSeatsForFlight(Long flightId) {
+        FlightEntity flight = flightRepository.findById(flightId)
+                .orElseThrow(() -> new RuntimeException("Flight not found"));
+        int bookedSeats = bookingRepository.countByFlightId(flightId);
+        return flight.getCapacity() - bookedSeats;
+    }
+
     private FlightDTO enrichWithAvailableSeats(FlightEntity flight) {
         int bookedSeats = bookingRepository.countByFlightId(flight.getId());
         FlightDTO dto = FlightMapper.toDTO(flight);
