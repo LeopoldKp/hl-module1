@@ -28,14 +28,14 @@ public class FlightMapper {
             return null;
         }
 
-        return new FlightDTO(
-                entity.getId(),
-                entity.getFlightNumber(),
-                entity.getDeparture(),
-                entity.getDestination(),
-                entity.getDepartureTime(),
-                entity.getCapacity(),
-                0 // availableSeats будет установлен в сервисе
-        );
+        FlightDTO dto = new FlightDTO();
+        dto.setId(entity.getId());
+        dto.setFlightNumber(entity.getFlightNumber());
+        dto.setDeparture(entity.getDeparture());
+        dto.setDestination(entity.getDestination());
+        dto.setDepartureTime(entity.getDepartureTime());
+        dto.setCapacity(entity.getCapacity());
+        dto.setAvailableSeats(0); // Будет установлено в сервисе
+        return dto;
     }
 }
