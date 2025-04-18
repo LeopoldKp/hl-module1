@@ -1,5 +1,6 @@
-services:
+version: '3.8'
 
+services:
   database:
     image: postgres:16.1-alpine3.18
     container_name: pg-docker
@@ -11,20 +12,17 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./initdb/scripts_python:/docker-entrypoint-initdb.d
+      - pg_data:/var/lib/postgresql/data
     networks:
       - app-network
-    depends_on:
-      init-db:
-        condition: service_completed_successfully
 
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: postgres@example.com
-      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
     depends_on:
@@ -32,21 +30,11 @@ services:
     networks:
       - app-network
 
-  init-db:
-    image: python:3.11-alpine
-    container_name: db-init
-    volumes:
-      - ./initdb:/initdb
-    working_dir: /initdb
-    entrypoint: ["python", "generate_sql.py"]
-    networks:
-      - app-network
-
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: spring-boot-app
+    container_name: aviation-app
     restart: always
     depends_on:
       - database
@@ -60,7 +48,9 @@ services:
     networks:
       - app-network
 
-
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  pg_data:

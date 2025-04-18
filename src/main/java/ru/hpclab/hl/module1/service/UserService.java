@@ -34,4 +34,8 @@ public class UserService {
         user.setIdentifier(UUID.fromString(id));
         return userRepository.put(user);
     }
+
+    public void clearAll() {
+        userRepository.clear();
+    }
 }

@@ -35,7 +35,7 @@ public class FlightMapper {
         dto.setDestination(entity.getDestination());
         dto.setDepartureTime(entity.getDepartureTime());
         dto.setCapacity(entity.getCapacity());
-        dto.setAvailableSeats(0); // Будет установлено в сервисе
+        dto.setAvailableSeats(entity.getCapacity()); // Инициализируем availableSeats = capacity
         return dto;
     }
 }

@@ -84,4 +84,15 @@ public class FlightService {
         dto.setAvailableSeats(flight.getCapacity() - bookedSeats);
         return dto;
     }
+
+    public void clearAll() {
+        flightRepository.deleteAll();
+        bookingRepository.deleteAll();
+    }
+
+    public FlightDTO createFlight(FlightDTO flightDTO) {
+        FlightEntity flightEntity = FlightMapper.toEntity(flightDTO);
+        flightEntity = flightRepository.save(flightEntity);
+        return FlightMapper.toDTO(flightEntity);
+    }
 }

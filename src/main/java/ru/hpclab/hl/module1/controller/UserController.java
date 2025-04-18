@@ -1,5 +1,6 @@
 package ru.hpclab.hl.module1.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.hpclab.hl.module1.entity.User;
@@ -40,6 +41,12 @@ public class UserController {
     @PutMapping(value = "/users/{id}")
     public User updateUser(@PathVariable(required = false) String id, @RequestBody User user) {
         return userService.updateUser(id, user);
+    }
+
+    @DeleteMapping("/clear")
+    @Operation(summary = "Очистить всех пользователей")
+    public void clearAllUsers() {
+        userService.clearAll();
     }
 
 }

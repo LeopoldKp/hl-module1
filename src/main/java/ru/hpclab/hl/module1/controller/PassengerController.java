@@ -1,5 +1,6 @@
 package ru.hpclab.hl.module1.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import ru.hpclab.hl.module1.dto.PassengerDTO;
 import ru.hpclab.hl.module1.service.PassengerService;
@@ -30,4 +31,11 @@ public class PassengerController {
     public PassengerDTO createPassenger(@RequestBody PassengerDTO passengerDTO) {
         return passengerService.createOrUpdatePassenger(passengerDTO);
     }
+
+        @DeleteMapping("/clear")
+        @Operation(summary = "Очистить всех пассажиров")
+        public void clearAllPassengers() {
+            passengerService.clearAll();
+        }
+
 }

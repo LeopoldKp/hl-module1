@@ -35,4 +35,10 @@ public class PassengerService {
         entity = passengerRepository.save(entity);
         return PassengerMapper.toDTO(entity);
     }
+
+    public void clearAll() {
+        passengerRepository.deleteAll();
+        // При необходимости добавить каскадное удаление бронирований
+        // bookingRepository.deleteByPassengerId(...)
+    }
 }

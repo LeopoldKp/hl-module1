@@ -137,5 +137,18 @@ public class FlightController {
         public int getAvailableSeats() {
             return availableSeats;
         }
+
+    }
+
+    @DeleteMapping("/clear")
+    @Operation(summary = "Очистить все рейсы")
+    public void clearAllFlights() {
+        flightService.clearAll();
+    }
+
+    @PostMapping
+    @Operation(summary = "Создать новый рейс")
+    public FlightDTO createFlight(@RequestBody FlightDTO flightDTO) {
+        return flightService.createFlight(flightDTO);
     }
 }

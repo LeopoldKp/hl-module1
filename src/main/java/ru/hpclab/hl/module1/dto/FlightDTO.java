@@ -1,6 +1,7 @@
 package ru.hpclab.hl.module1.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import java.time.LocalDateTime;
 
 public class FlightDTO {
@@ -9,7 +10,7 @@ public class FlightDTO {
     private String departure;
     private String destination;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime departureTime;
 
     private int capacity;
@@ -62,13 +63,18 @@ public class FlightDTO {
         this.destination = destination;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     public LocalDateTime getDepartureTime() {
         return departureTime;
     }
 
     public void setDepartureTime(LocalDateTime departureTime) {
         this.departureTime = departureTime;
+    }
+
+    @JsonGetter("departureTime")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    public LocalDateTime getDepartureDateOnly() {
+        return departureTime;
     }
 
     public int getCapacity() {
