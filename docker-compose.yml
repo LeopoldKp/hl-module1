@@ -31,6 +31,11 @@ services:
       - app-network
 
   app:
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"    # Максимум  CPU
+          memory: "1G" # Максимум  RAM
     build:
       context: .
       dockerfile: Dockerfile
@@ -39,10 +44,11 @@ services:
     depends_on:
       - database
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/module1
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      DB_URL: jdbc:postgresql://database:5432/module1
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_SERVER_TOMCAT_MAX_THREADS: 200
+      HIBERNATE_SHOW_SQL: false
     ports:
       - "8080:8080"
     networks:
