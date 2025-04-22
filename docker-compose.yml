@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: module1
+      POSTGRES_DB: zandb
     ports:
       - "5432:5432"
     volumes:
@@ -16,7 +16,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d module1"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d zandb"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -51,7 +51,7 @@ services:
       database:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/module1
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/zandb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
