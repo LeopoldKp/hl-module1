@@ -6,6 +6,7 @@
 # Node artifact files
 node_modules/
 dist/
+build/
 
 # Compiled Java class files
 *.class
@@ -16,13 +17,13 @@ dist/
 # Log files
 *.log
 
-# Package files
-*.jar
 
 # Maven
 target/
 dist/
 
+
+gradle
 # JetBrains IDE
 .idea/
 
