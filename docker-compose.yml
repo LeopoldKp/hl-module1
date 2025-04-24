@@ -37,9 +37,7 @@ services:
         condition: service_healthy
 
   crud-service:
-    build:
-      context: ./crud-service
-      dockerfile: Dockerfile
+    image: leopoldpt/aviation-crud-service
     container_name: aviation-crud-service
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/zandb
@@ -56,9 +54,7 @@ services:
         condition: service_healthy
 
   availability-service:
-    build:
-      context: ./availability-service
-      dockerfile: Dockerfile
+    image: leopoldpt/availability-service
     container_name: availability-service
     environment:
       CRUD_SERVICE_URL: "http://crud-service:8080"

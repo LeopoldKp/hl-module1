@@ -4,7 +4,6 @@ import ru.hpclab.hl.module1.dto.FlightDTO;
 import ru.hpclab.hl.module1.entity.FlightEntity;
 
 public class FlightMapper {
-
     private FlightMapper() {
     }
 
@@ -18,7 +17,7 @@ public class FlightMapper {
         entity.setFlightNumber(dto.getFlightNumber());
         entity.setDeparture(dto.getDeparture());
         entity.setDestination(dto.getDestination());
-        entity.setDepartureTime(dto.getDepartureTime());
+        entity.setDepartureDate(dto.getDepartureDate());
         entity.setCapacity(dto.getCapacity());
         return entity;
     }
@@ -33,7 +32,7 @@ public class FlightMapper {
         dto.setFlightNumber(entity.getFlightNumber());
         dto.setDeparture(entity.getDeparture());
         dto.setDestination(entity.getDestination());
-        dto.setDepartureTime(entity.getDepartureTime());
+        dto.setDepartureDate(entity.getDepartureDate());
         dto.setCapacity(entity.getCapacity());
         dto.setAvailableSeats(entity.getCapacity()); // Инициализируем availableSeats = capacity
         return dto;

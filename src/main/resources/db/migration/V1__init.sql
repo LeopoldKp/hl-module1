@@ -6,13 +6,13 @@ CREATE TABLE t_passenger (
     contact_info VARCHAR(255)
 );
 
--- Создание таблицы рейсов
+-- Создание таблицы рейсов (с полем departure_date вместо departure_time)
 CREATE TABLE t_flight (
     id BIGSERIAL PRIMARY KEY,
     flight_number VARCHAR(255) NOT NULL,
     departure VARCHAR(255) NOT NULL,
     destination VARCHAR(255) NOT NULL,
-    departure_time TIMESTAMP NOT NULL,
+    departure_date DATE NOT NULL,  -- Изменено на DATE
     capacity INTEGER NOT NULL
 );
 

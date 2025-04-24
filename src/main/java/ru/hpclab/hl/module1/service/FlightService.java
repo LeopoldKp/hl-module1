@@ -10,7 +10,6 @@ import ru.hpclab.hl.module1.controller.FlightController.FlightAvailability;
 import ru.hpclab.hl.module1.controller.FlightController.FlightWithSeats;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +37,9 @@ public class FlightService {
     }
 
     public List<FlightAvailability> getFlightsAvailability(String departure, String destination,
-                                                           LocalDateTime startDate, LocalDateTime endDate) {
-        return flightRepository.findByCriteria(departure, destination, startDate, endDate).stream()
+                                                           String date) {
+        LocalDate flightDate = LocalDate.parse(date);
+        return flightRepository.findByCriteria(departure, destination, flightDate).stream()
                 .map(flight -> {
                     int bookedSeats = bookingRepository.countByFlightId(flight.getId());
                     int availableSeats = flight.getCapacity() - bookedSeats;
@@ -47,7 +47,7 @@ public class FlightService {
                             flight.getFlightNumber(),
                             flight.getDeparture(),
                             flight.getDestination(),
-                            flight.getDepartureTime().toLocalDate(),
+                            flight.getDepartureDate(),
                             availableSeats
                     );
                 })
@@ -55,16 +55,16 @@ public class FlightService {
     }
 
     public List<FlightWithSeats> getFlightsByDestinationAndDate(String destination,
-                                                                LocalDateTime startDate,
-                                                                LocalDateTime endDate) {
-        return flightRepository.findByDestinationAndDate(destination, startDate, endDate).stream()
+                                                                String date) {
+        LocalDate flightDate = LocalDate.parse(date);
+        return flightRepository.findByDestinationAndDate(destination, flightDate).stream()
                 .map(flight -> {
                     int bookedSeats = bookingRepository.countByFlightId(flight.getId());
                     int availableSeats = flight.getCapacity() - bookedSeats;
                     return new FlightWithSeats(
                             flight.getFlightNumber(),
                             flight.getDeparture(),
-                            flight.getDepartureTime().toLocalDate(),
+                            flight.getDepartureDate(),
                             availableSeats
                     );
                 })
@@ -97,8 +97,9 @@ public class FlightService {
     }
 
     public List<FlightDTO> searchFlights(String departure, String destination,
-                                         LocalDateTime startDate, LocalDateTime endDate) {
-        return flightRepository.findByCriteria(departure, destination, startDate, endDate)
+                                         String date) {
+        LocalDate flightDate = LocalDate.parse(date);
+        return flightRepository.findByCriteria(departure, destination, flightDate)
                 .stream()
                 .map(FlightMapper::toDTO)
                 .collect(Collectors.toList());

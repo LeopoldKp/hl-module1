@@ -1,14 +1,12 @@
 package ru.hpclab.hl.module1.entity;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "t_flight")
 public class FlightEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,8 +20,8 @@ public class FlightEntity {
     @Column(nullable = false)
     private String destination;
 
-    @Column(name = "departure_time", nullable = false)
-    private LocalDateTime departureTime;
+    @Column(name = "departure_date", nullable = false)
+    private LocalDate departureDate;
 
     @Column(nullable = false)
     private int capacity;
@@ -35,68 +33,67 @@ public class FlightEntity {
     }
 
     public FlightEntity(Long id, String flightNumber, String departure, String destination,
-                        LocalDateTime departureTime, int capacity, List<BookingEntity> bookings) {
+                        LocalDate departureDate, int capacity, List<BookingEntity> bookings) {
         this.id = id;
         this.flightNumber = flightNumber;
         this.departure = departure;
         this.destination = destination;
-        this.departureTime = departureTime;
+        this.departureDate = departureDate;
         this.capacity = capacity;
         this.bookings = bookings;
     }
 
-    // Геттеры
+    // Геттеры и сеттеры
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFlightNumber() {
         return flightNumber;
     }
 
-    public String getDeparture() {
-        return departure;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public LocalDateTime getDepartureTime() {
-        return departureTime;
-    }
-
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public List<BookingEntity> getBookings() {
-        return bookings;
-    }
-
-    // Сеттеры
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setFlightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
+    }
+
+    public String getDeparture() {
+        return departure;
     }
 
     public void setDeparture(String departure) {
         this.departure = departure;
     }
 
+    public String getDestination() {
+        return destination;
+    }
+
     public void setDestination(String destination) {
         this.destination = destination;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
-        this.departureTime = departureTime;
+    public LocalDate getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
+    }
+
+    public int getCapacity() {
+        return capacity;
     }
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public List<BookingEntity> getBookings() {
+        return bookings;
     }
 
     public void setBookings(List<BookingEntity> bookings) {
@@ -110,7 +107,7 @@ public class FlightEntity {
                 ", flightNumber='" + flightNumber + '\'' +
                 ", departure='" + departure + '\'' +
                 ", destination='" + destination + '\'' +
-                ", departureTime=" + departureTime +
+                ", departureDate=" + departureDate +
                 ", capacity=" + capacity +
                 '}';
     }

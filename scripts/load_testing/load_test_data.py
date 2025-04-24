@@ -35,8 +35,8 @@ def create_flight():
         "flightNumber": fake.unique.bothify(text='??###').upper(),
         "departure": departure,
         "destination": destination,
-        "departureTime": departure_date.strftime("%Y-%m-%d") + "T00:00:00",
-        "capacity": capacity  # Убрали availableSeats
+        "departureDate": departure_date.strftime("%Y-%m-%d"),  # Изменено на departureDate
+        "capacity": capacity
     }
 
     response = requests.post(
@@ -47,7 +47,7 @@ def create_flight():
 
     if response.status_code == 200:
         flight = response.json()
-        print(f"Создан рейс: {flight['flightNumber']} {flight['departure']}-{flight['destination']} на {flight['departureTime']}")
+        print(f"Создан рейс: {flight['flightNumber']} {flight['departure']}-{flight['destination']} на {flight['departureDate']}")
         return flight
     print(f"Ошибка создания рейса: {response.status_code} - {response.text}")
     return None

@@ -1,8 +1,7 @@
 package ru.hpclab.hl.module1.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class FlightDTO {
     private Long id;
@@ -10,8 +9,8 @@ public class FlightDTO {
     private String departure;
     private String destination;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime departureTime;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate departureDate;
 
     private int capacity;
     private int availableSeats;
@@ -20,12 +19,12 @@ public class FlightDTO {
     }
 
     public FlightDTO(Long id, String flightNumber, String departure, String destination,
-                     LocalDateTime departureTime, int capacity, int availableSeats) {
+                     LocalDate departureDate, int capacity, int availableSeats) {
         this.id = id;
         this.flightNumber = flightNumber;
         this.departure = departure;
         this.destination = destination;
-        this.departureTime = departureTime;
+        this.departureDate = departureDate;
         this.capacity = capacity;
         this.availableSeats = availableSeats;
     }
@@ -63,18 +62,12 @@ public class FlightDTO {
         this.destination = destination;
     }
 
-    public LocalDateTime getDepartureTime() {
-        return departureTime;
+    public LocalDate getDepartureDate() {
+        return departureDate;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
-        this.departureTime = departureTime;
-    }
-
-    @JsonGetter("departureTime")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    public LocalDateTime getDepartureDateOnly() {
-        return departureTime;
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
     }
 
     public int getCapacity() {
@@ -100,7 +93,7 @@ public class FlightDTO {
                 ", flightNumber='" + flightNumber + '\'' +
                 ", departure='" + departure + '\'' +
                 ", destination='" + destination + '\'' +
-                ", departureTime=" + departureTime.toLocalDate() +
+                ", departureDate=" + departureDate +
                 ", capacity=" + capacity +
                 ", availableSeats=" + availableSeats +
                 '}';
