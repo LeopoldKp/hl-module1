@@ -1,28 +1,20 @@
 package ru.hpclab.hl.module1.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import ru.hpclab.hl.module1.client.CrudServiceClient;
 import ru.hpclab.hl.module1.dto.BookingDTO;
 import ru.hpclab.hl.module1.dto.FlightAvailabilityResponse;
 import ru.hpclab.hl.module1.dto.FlightDTO;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class AvailabilityService {
-    private final RestTemplate restTemplate;
-    private final String crudServiceUrl = "http://crud-service:8080";
+    private final CrudServiceClient crudServiceClient;
 
-    public AvailabilityService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public AvailabilityService(CrudServiceClient crudServiceClient) {
+        this.crudServiceClient = crudServiceClient;
     }
 
     public List<FlightAvailabilityResponse> getFlightAvailability(
@@ -30,30 +22,11 @@ public class AvailabilityService {
             String destination,
             String date) {
 
-        // Формируем URL для запроса рейсов
-        String url = crudServiceUrl + "/flights/search?date=" + date;
-        if (departure != null) {
-            url += "&departure=" + departure;
-        }
-        if (destination != null) {
-            url += "&destination=" + destination;
-        }
+        // Получаем рейсы через клиент
+        List<FlightDTO> flights = crudServiceClient.searchFlights(date, departure, destination);
 
-        // Получаем рейсы за указанную дату
-        List<FlightDTO> flights = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<FlightDTO>>() {}
-        ).getBody();
-
-        // Получаем все бронирования
-        List<BookingDTO> bookings = restTemplate.exchange(
-                crudServiceUrl + "/bookings",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<BookingDTO>>() {}
-        ).getBody();
+        // Получаем бронирования через клиент
+        List<BookingDTO> bookings = crudServiceClient.getAllBookings();
 
         // Формируем ответ
         return flights.stream()
