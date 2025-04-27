@@ -19,21 +19,11 @@ public class CrudServiceClientImpl implements CrudServiceClient {
     }
 
     @Override
-    public List<FlightDTO> searchFlights(String date, String departure, String destination) {
-        String url = crudServiceUrl + "/flights/search?date=" + date;
-        if (departure != null) {
-            url += "&departure=" + departure;
-        }
-        if (destination != null) {
-            url += "&destination=" + destination;
-        }
-
-        return restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<FlightDTO>>() {}
-        ).getBody();
+    public FlightDTO getFlightById(Long id) {
+        return restTemplate.getForObject(
+                crudServiceUrl + "/flights/" + id,
+                FlightDTO.class
+        );
     }
 
     @Override
