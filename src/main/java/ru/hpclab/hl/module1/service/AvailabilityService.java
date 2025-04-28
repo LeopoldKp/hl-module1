@@ -6,6 +6,7 @@ import ru.hpclab.hl.module1.client.CrudServiceClient;
 import ru.hpclab.hl.module1.dto.BookingDTO;
 import ru.hpclab.hl.module1.dto.FlightAvailabilityResponse;
 import ru.hpclab.hl.module1.dto.FlightDTO;
+import ru.hpclab.hl.module1.service.statistics.ObservabilityService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,11 +18,14 @@ import java.util.stream.Collectors;
 public class AvailabilityService {
     private final CrudServiceClient crudServiceClient;
     private final FlightCache flightCache;
+    private final ObservabilityService observabilityService;
 
     public AvailabilityService(CrudServiceClient crudServiceClient,
-                               FlightCache flightCache) {
+                               FlightCache flightCache,
+                               ObservabilityService observabilityService) {
         this.crudServiceClient = crudServiceClient;
         this.flightCache = flightCache;
+        this.observabilityService = observabilityService;
     }
 
     public List<FlightAvailabilityResponse> getFlightAvailability(
@@ -29,42 +33,60 @@ public class AvailabilityService {
             String destination,
             String date) {
 
-        List<BookingDTO> allBookings = crudServiceClient.getAllBookings();
+        observabilityService.start("getAllBookings");
+        List<BookingDTO> allBookings;
+        try {
+            allBookings = crudServiceClient.getAllBookings();
+        } finally {
+            observabilityService.stop("getAllBookings");
+        }
 
         Set<Long> uniqueFlightIds = allBookings.stream()
                 .map(BookingDTO::getFlightId)
                 .collect(Collectors.toSet());
 
         return uniqueFlightIds.stream()
-                .map(flightId -> {
-                    // Пытаемся получить рейс из кэша
-                    FlightDTO flight = flightCache.get(flightId);
-
-                    // Если нет в кэше - запрашиваем и сохраняем
-                    if (flight == null) {
-                        flight = crudServiceClient.getFlightById(flightId);
-                        if (flight != null) {
-                            flightCache.put(flightId, flight);
-                        }
-                    }
-
-                    if (flight != null && matchesCriteria(flight, departure, destination, date)) {
-                        int bookedSeats = (int) allBookings.stream()
-                                .filter(booking -> booking.getFlightId().equals(flightId))
-                                .count();
-
-                        return new FlightAvailabilityResponse(
-                                flight.getFlightNumber(),
-                                flight.getDeparture(),
-                                flight.getDestination(),
-                                flight.getDepartureDate(),
-                                flight.getCapacity() - bookedSeats
-                        );
-                    }
-                    return null;
-                })
+                .map(flightId -> processFlight(flightId, departure, destination, date, allBookings))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    private FlightAvailabilityResponse processFlight(Long flightId, String departure,
+                                                     String destination, String date,
+                                                     List<BookingDTO> allBookings) {
+        observabilityService.start("processFlight");
+        try {
+            FlightDTO flight = flightCache.get(flightId);
+
+            if (flight == null) {
+                observabilityService.start("getFlightFromCrud");
+                try {
+                    flight = crudServiceClient.getFlightById(flightId);
+                    if (flight != null) {
+                        flightCache.put(flightId, flight);
+                    }
+                } finally {
+                    observabilityService.stop("getFlightFromCrud");
+                }
+            }
+
+            if (flight != null && matchesCriteria(flight, departure, destination, date)) {
+                int bookedSeats = (int) allBookings.stream()
+                        .filter(booking -> booking.getFlightId().equals(flightId))
+                        .count();
+
+                return new FlightAvailabilityResponse(
+                        flight.getFlightNumber(),
+                        flight.getDeparture(),
+                        flight.getDestination(),
+                        flight.getDepartureDate(),
+                        flight.getCapacity() - bookedSeats
+                );
+            }
+            return null;
+        } finally {
+            observabilityService.stop("processFlight");
+        }
     }
 
     private boolean matchesCriteria(FlightDTO flight, String departure,
