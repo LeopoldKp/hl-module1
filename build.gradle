@@ -27,6 +27,10 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.6.3'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
 
+    // Spring Kafka
+    implementation 'org.springframework.kafka:spring-kafka:3.3.5'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
     implementation 'org.springframework.boot:spring-boot-starter-web'
