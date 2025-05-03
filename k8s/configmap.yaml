@@ -4,6 +4,10 @@
     name: aviation-config
     namespace: var6
   data:
+    REDIS_HOST: "redis-internal"
+    REDIS_PORT: "6379"
+    REDIS_EXTERNAL_HOST: "10.60.3.9"  # Замените на реальный IP ноды
+    REDIS_EXTERNAL_PORT: "32002"
     DB_HOST: "10.60.3.26"
     DB_PORT: "5432"
     POSTGRES_DB: "zandb"
@@ -12,8 +16,7 @@
     SPRING_DATASOURCE_USERNAME: "postgres"
     SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
     SPRING_JPA_SHOW_SQL: "false"
-    KAFKA_HOSTS: "hl22zil:9094,hl23.zil:9094"
-    #KAFKA_HOSTS: "10.60.3.27,10.60.3.28"
+    KAFKA_HOSTS: "10.60.3.27:9094,10.60.3.28:9094"
     SPRING_FLYWAY_ENABLED: "true"
     SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
     TOMCAT_THREADS_MAX: "200"
