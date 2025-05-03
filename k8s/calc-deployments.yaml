@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aviation-availability
+  namespace: var6
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aviation-availability
+  template:
+    metadata:
+      labels:
+        app: aviation-availability
+    spec:
+      containers:
+        - name: aviation-availability
+          image: leopoldpt/availability-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SERVER_PORT
+              value: "8081"
+          envFrom:
+            - configMapRef:
+                name: aviation-config
+            - secretRef:
+                name: aviation-secrets
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "1"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+      imagePullSecrets:
+        - name: dockerhub-secret

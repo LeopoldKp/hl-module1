@@ -1,0 +1,21 @@
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: aviation-config
+    namespace: var6
+  data:
+    DB_HOST: "10.60.3.26"
+    DB_PORT: "5432"
+    POSTGRES_DB: "zandb"
+    POSTGRES_USER: "postgres"
+    SPRING_DATASOURCE_URL: "jdbc:postgresql://10.60.3.26:5432/zandb"
+    SPRING_DATASOURCE_USERNAME: "postgres"
+    SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+    SPRING_JPA_SHOW_SQL: "false"
+    KAFKA_HOSTS: "hl22zil:9094,hl23.zil:9094"
+    #KAFKA_HOSTS: "10.60.3.27,10.60.3.28"
+    SPRING_FLYWAY_ENABLED: "true"
+    SPRING_FLYWAY_BASELINE_ON_MIGRATE: "true"
+    TOMCAT_THREADS_MAX: "200"
+    SERVER_ADDRESS: "0.0.0.0"
+    CRUD_SERVICE_URL: "http://aviation-main-internal:8080"

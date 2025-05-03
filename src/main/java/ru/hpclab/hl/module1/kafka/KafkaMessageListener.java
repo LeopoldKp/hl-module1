@@ -16,7 +16,7 @@ public class KafkaMessageListener {
     private final KafkaMessageDispatcher dispatcher;
 
     @KafkaListener(
-            topics = "${KAFKA_TOPIC:aviation-events}",  // Читаем из топика (с дефолтным значением)
+            topics = "${KAFKA_TOPIC:var06}",  // Читаем из топика (с дефолтным значением)
             groupId = "${KAFKA_GROUP_ID:aviation-consumer-group}",  // Группа потребителей
             concurrency = "${KAFKA_CONCURRENCY:3}",  // 3 потока обработки
             containerFactory = "batchFactory"  // Используем batch-обработку

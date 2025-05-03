@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aviation-main
+  namespace: var6
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aviation-main
+  template:
+    metadata:
+      labels:
+        app: aviation-main
+    spec:
+      containers:
+        - name: aviation-main
+          image: leopoldpt/aviation-crud-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: aviation-config
+            - secretRef:
+                name: aviation-secrets
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "1"
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+      imagePullSecrets:
+        - name: dockerhub-secret

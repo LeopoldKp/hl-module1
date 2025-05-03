@@ -17,7 +17,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-    @Value("${KAFKA_HOSTS:hl22.zil:9094,hl23.zil:9094}")
+    @Value("${KAFKA_HOSTS:10.60.3.27,10.60.3.28}")
     private String bootstrapServers;
 
     @Value("${KAFKA_GROUP_ID:aviation-consumer-group}")

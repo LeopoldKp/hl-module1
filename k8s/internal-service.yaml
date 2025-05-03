@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aviation-main-internal
+  namespace: var6
+spec:
+  selector:
+    app: aviation-main
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: ClusterIP
