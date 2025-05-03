@@ -14,7 +14,7 @@ import java.util.List;
 public class CrudServiceClientImpl implements CrudServiceClient {
     private final RestTemplate restTemplate;
     private final ObservabilityService observabilityService;
-    private final String crudServiceUrl = "http://crud-service:8080";
+    private final String crudServiceUrl = "http://aviation-main-internal:8080";
 
     public CrudServiceClientImpl(RestTemplate restTemplate,
                                  ObservabilityService observabilityService) {
