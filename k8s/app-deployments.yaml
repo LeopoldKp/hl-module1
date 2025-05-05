@@ -13,12 +13,33 @@ spec:
       labels:
         app: aviation-main
     spec:
+      hostAliases:
+        - ip: "10.60.3.27"
+          hostnames:
+            - "hl22.zil"
+        - ip: "10.60.3.28"
+          hostnames:
+            - "hl23.zil"
       containers:
         - name: aviation-main
           image: leopoldpt/aviation-crud-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            failureThreshold: 3
           envFrom:
             - configMapRef:
                 name: aviation-config
