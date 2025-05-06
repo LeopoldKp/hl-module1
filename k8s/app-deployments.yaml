@@ -22,29 +22,33 @@ spec:
             - "hl23.zil"
       containers:
         - name: aviation-main
-          image: leopoldpt/aviation-crud-service:latest
+          image: leopoldpt/aviation-crud-service:lab18r
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
-          livenessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8080
-            initialDelaySeconds: 15
-            periodSeconds: 5
-            failureThreshold: 3
           envFrom:
             - configMapRef:
                 name: aviation-config
             - secretRef:
                 name: aviation-secrets
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           resources:
             requests:
               memory: "1Gi"

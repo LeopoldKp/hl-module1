@@ -4,6 +4,10 @@
     name: aviation-config
     namespace: var6
   data:
+    REDIS_HOST: "redis-internal"
+    REDIS_PORT: "6379"
+    REDIS_EXTERNAL_HOST: "10.60.3.9"  # Замените на реальный IP ноды
+    REDIS_EXTERNAL_PORT: "32002"
     DB_HOST: "10.60.3.26"
     DB_PORT: "5432"
     POSTGRES_DB: "zandb"

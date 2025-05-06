@@ -15,22 +15,10 @@ spec:
     spec:
       containers:
         - name: aviation-availability
-          image: leopoldpt/availability-service:latest
+          image: leopoldpt/availability-service:lab18r
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
-          livenessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8081
-            initialDelaySeconds: 30
-            periodSeconds: 10
-          readinessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8081
-            initialDelaySeconds: 15
-            periodSeconds: 5
           env:
             - name: SERVER_PORT
               value: "8081"
@@ -39,6 +27,24 @@ spec:
                 name: aviation-config
             - secretRef:
                 name: aviation-secrets
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
           resources:
             requests:
               memory: "1Gi"
