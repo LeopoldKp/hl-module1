@@ -1,5 +1,7 @@
 package ru.hpclab.hl.module1.client;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -23,6 +25,8 @@ public class CrudServiceClientImpl implements CrudServiceClient {
     }
 
     @Override
+    @CircuitBreaker(name = "crudService", fallbackMethod = "getFlightByIdFallback")
+    @Retry(name = "crudService")
     public FlightDTO getFlightById(Long id) {
         observabilityService.start("getFlightByIdFromCrud");
         try {
@@ -38,6 +42,8 @@ public class CrudServiceClientImpl implements CrudServiceClient {
     }
 
     @Override
+    @CircuitBreaker(name = "crudService", fallbackMethod = "getAllBookingsFallback")
+    @Retry(name = "crudService")
     public List<BookingDTO> getAllBookings() {
         observabilityService.start("getAllBookingsFromCrud");
         try {
@@ -52,5 +58,16 @@ public class CrudServiceClientImpl implements CrudServiceClient {
         } finally {
             observabilityService.stop("getAllBookingsFromCrud");
         }
+    }
+
+    // Fallback методы
+    private FlightDTO getFlightByIdFallback(Long id, Exception e) {
+        observabilityService.recordCustomMetric("crudFlightFallbacks", 1);
+        return null; // или можно вернуть дефолтный FlightDTO
+    }
+
+    private List<BookingDTO> getAllBookingsFallback(Exception e) {
+        observabilityService.recordCustomMetric("crudBookingFallbacks", 1);
+        return List.of(); // возвращаем пустой список при fallback
     }
 }
